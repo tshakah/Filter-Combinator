@@ -131,13 +131,22 @@ local function reactivateAll()
     global.deactivated_entities = global.deactivated_entities or {}
   end
 
-  for _, entity in pairs(global.deactivated_entities) do
-    if not getOutputParameters(entity).isOverflow then
-      entity.main_entity.active = true
-      global.entities[entity.main_entity.unit_number] = entity
-      global.deactivated_entities[entity.main_entity.unit_number] = nil
+  for index, entity in pairs(global.deactivated_entities) do
+    if
+      entity.main_entity
+      and entity.main_entity.valid
+      and entity.output_entity
+      and entity.output_entity.valid
+    then
+      if not getOutputParameters(entity).isOverflow then
+        entity.main_entity.active = true
+        global.entities[entity.main_entity.unit_number] = entity
+        global.deactivated_entities[entity.main_entity.unit_number] = nil
+      else
+        sendAlert(entity)
+      end
     else
-      sendAlert(entity)
+      global.deactivated_entities[index] = nil
     end
   end
 end
