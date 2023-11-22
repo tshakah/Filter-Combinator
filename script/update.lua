@@ -95,7 +95,7 @@ local function handleSignalOverflow(entity)
   sendAlert(entity)
 end
 
-local function onTick(e)
+local function updateSignals(e)
   if (not max_output_signals) and setMaxOutputSignals then
     setMaxOutputSignals()
   end
@@ -144,5 +144,5 @@ end
 
 script.on_load(setMaxOutputSignals)
 
-script.on_event(defines.events.on_tick, onTick)
+script.on_nth_tick(settings.startup["filter-combinator-update-ticks"].value, updateSignals)
 script.on_nth_tick(60 * settings.startup["filter-combinator-reactivate-seconds"].value, reactivateAll)

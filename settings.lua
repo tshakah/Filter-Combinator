@@ -18,3 +18,13 @@ data:extend({
     default_value = 60
   }
 })
+data:extend({
+  {
+    type = "int-setting",
+    name = "filter-combinator-update-ticks",
+    description = "filter-combinator-update-ticks",
+    setting_type = "startup",
+    minimum_value = 1,
+    default_value = 20
+  }
+})
