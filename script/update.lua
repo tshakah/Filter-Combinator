@@ -95,37 +95,6 @@ local function handleSignalOverflow(entity)
   sendAlert(entity)
 end
 
-local function updateSignals(e)
-  if (not max_output_signals) and setMaxOutputSignals then
-    setMaxOutputSignals()
-  end
-
-  for _, entity in pairs(global.entities) do
-    if
-      entity.main_entity
-      and entity.main_entity.valid
-      and entity.main_entity.active
-      and entity.output_entity
-      and entity.output_entity.valid
-    then
-      if
-        entity.main_entity.status == defines.entity_status.no_power
-        or entity.main_entity.status == defines.entity_status.low_power
-      then
-        entity.output_entity.get_control_behavior().parameters = nil
-      else
-        local outputParameters = getOutputParameters(entity)
-
-        if not outputParameters.isOverflow then
-          entity.output_entity.get_control_behavior().parameters = outputParameters.parameters
-        else
-          handleSignalOverflow(entity)
-        end
-      end
-    end
-  end
-end
-
 local function reactivateAll()
   if not global.deactivated_entities then
     global.deactivated_entities = global.deactivated_entities or {}
@@ -151,7 +120,42 @@ local function reactivateAll()
   end
 end
 
+local function updateSignals(e)
+  if (not max_output_signals) and setMaxOutputSignals then
+    setMaxOutputSignals()
+  end
+
+  for _, entity in pairs(global.entities) do
+    updateEntitySignals(entity)
+  end
+end
+
+function updateEntitySignals(entity)
+  if
+    entity.main_entity
+    and entity.main_entity.valid
+    and entity.main_entity.active
+    and entity.output_entity
+    and entity.output_entity.valid
+  then
+    if
+      entity.main_entity.status == defines.entity_status.no_power
+      or entity.main_entity.status == defines.entity_status.low_power
+    then
+      entity.output_entity.get_control_behavior().parameters = nil
+    else
+      local outputParameters = getOutputParameters(entity)
+
+      if not outputParameters.isOverflow then
+        entity.output_entity.get_control_behavior().parameters = outputParameters.parameters
+      else
+        handleSignalOverflow(entity)
+      end
+    end
+  end
+end
+
 script.on_load(setMaxOutputSignals)
 
-script.on_nth_tick(settings.startup["filter-combinator-update-ticks"].value, updateSignals)
 script.on_nth_tick(60 * settings.startup["filter-combinator-reactivate-seconds"].value, reactivateAll)
+script.on_nth_tick(settings.startup["filter-combinator-update-ticks"].value, updateSignals)

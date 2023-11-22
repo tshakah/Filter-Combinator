@@ -69,8 +69,10 @@ local function on_gui_closed(e)
 
   local unit_number = global.opened_entity[e.player_index]
 
+  local entity = getEntity(unit_number)
+
   -- Check if the entity is owned by this mod
-  if not getEntity(unit_number) then
+  if not entity then
     return
   end
 
@@ -78,6 +80,8 @@ local function on_gui_closed(e)
   e.element = nil
   game.players[e.player_index].opened = nil
   global.opened_entity[e.player_index] = nil
+
+  updateEntitySignals(entity)
 end
 
 local function on_gui_switch_state_changed(e)
