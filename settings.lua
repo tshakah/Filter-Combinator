@@ -5,7 +5,7 @@ data:extend({
     description = "filter-combinator-output-slots",
     setting_type = "startup",
     minimum_value = 1,
-    default_value = 40
+    default_value = 100
   }
 })
 data:extend({
