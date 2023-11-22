@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 22-Nov-2023
+  Changes:
+    - Add setting to increase ticks between filter updates to save UPS
+    - Increased default number of output slots
+  Bugfixes:
+    - Fixed crash when combinator is deleted
+---------------------------------------------------------------------------------------------------
 Version: 1.1.7
 Date: 29-Mar-2021
   Bugfixes:
