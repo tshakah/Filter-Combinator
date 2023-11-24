@@ -2,7 +2,7 @@ function getEntity(unit_number)
   return global.entities[unit_number] or global.deactivated_entities[unit_number]
 end
 
-local function getOutputPosition(main_entity)
+function getOutputPosition(main_entity)
   local position = main_entity.position
 
   if main_entity.direction == defines.direction.north then
